@@ -41,6 +41,44 @@ class ShotChart:
     def leagueaverage(self):
         return pd.DataFrame(self._x['resultSets'][1]['rowSet'],columns=self._x['resultSets'][1]['headers'])
 
+class Team:
+    def __init__(self, teamid, datefrom ='', dateto ='', gamesegment ='',lastngames =0, leagueid='00',location='',measuretype ='Base',month=0,opponentteamid=0,outcome='',
+              paceadjust='N',permode='PerGame',period=0,plusminus='N',rank='N',season='2013-14',seasonsegment='',seasontype='Regular Season',
+              vsconference='',vsdivision=''):
+
+        self._url = "http://stats.nba.com/stats/teamdashboardbygeneralsplits?"
+        self._api_param = {
+             'DateFrom' :  datefrom,
+             'DateTo' : dateto,
+             'GameSegment' : gamesegment,
+             'LastNGames' : lastngames,
+             'LeagueID': leagueid,     
+             'Location' : location,
+             'MeasureType': measuretype,
+             'Month': month,
+             'OpponentTeamID' : opponentteamid,
+             'Outcome' : outcome,
+             'PaceAdjust' : paceadjust,
+             'PerMode' : permode,
+             'Period' : period,
+             'PlusMinus' : plusminus,
+             'Rank' : rank,
+             'Season' :  season,
+             'SeasonType' : seasontype,
+             'SeasonSegment' : seasonsegment,
+             'TeamID' : teamid,
+             'VsConference' : vsconference,
+             'VsDivision' : vsdivision
+             }
+        self._x = requests.get(self._url, params=self._api_param)
+        self._x = self._x.json()
+    def overall(self):
+        return pd.DataFrame(self._x['resultSets'][0]['rowSet'],columns=self._x['resultSets'][0]['headers']) 
+    # def leagueaverage(self):
+    #     return pd.DataFrame(self._x['resultSets'][1]['rowSet'],columns=self._x['resultSets'][1]['headers'])
+
+
+
 class BoxScore:
     def __init__(self, gameid, rangetype=0, startperiod=0, endperiod=0, startrange=0, endrange=0):
         self._url = "http://stats.nba.com/stats/boxscore?"
