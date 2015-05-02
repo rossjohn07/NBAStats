@@ -159,6 +159,26 @@ class BoxScore:
     def teamtrack(self):
         return pd.DataFrame(self._x['resultSets'][12]['rowSet'],columns=self._x['resultSets'][12]['headers'])
 
+
+class Team_Gamelog:
+    def __init__(self, teamid, leagueid='00',season='2014-15',seasontype='Regular Season',
+              vsconference='',vsdivision=''):
+
+        self._url = "http://stats.nba.com/stats/teamgamelog?"
+        self._api_param = {
+             'LeagueID': leagueid,           
+             'Season' :  season,
+             'SeasonType' : seasontype,
+             'TeamID' : teamid
+             }
+        self._x = requests.get(self._url, params=self._api_param)
+        self._x = self._x.json()
+    def gamelog(self):
+        return pd.DataFrame(self._x['resultSets'][0]['rowSet'],columns=self._x['resultSets'][0]['headers']) 
+
+
+
+
 class GameLog:
     def __init__(self, playerid, season='2013-14',seasontype='Regular Season', leagueid=''):
         self._url = "http://stats.nba.com/stats/playergamelog?"
