@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+
 pd.set_option('notebook_repr_html',True)
 pd.set_option('display.max_columns',300)
 pd.set_option('display.width',3000)
@@ -41,6 +42,87 @@ class ShotChart:
     def leagueaverage(self):
         return pd.DataFrame(self._x['resultSets'][1]['rowSet'],columns=self._x['resultSets'][1]['headers'])
 
+class Team_info:
+    def __init__(self, teamid, leagueid='00',season='2013-14',seasontype='Regular Season',
+              vsconference='',vsdivision=''):
+
+        self._url = "http://stats.nba.com/stats/teaminfocommon?"
+        self._api_param = {
+             'LeagueID': leagueid,           
+             'Season' :  season,
+             'SeasonType' : seasontype,
+             'TeamID' : teamid
+             }
+        self._x = requests.get(self._url, params=self._api_param)
+        self._x = self._x.json()
+    def info(self):
+        return pd.DataFrame(self._x['resultSets'][0]['rowSet'],columns=self._x['resultSets'][0]['headers']) 
+
+class Team_details:
+    def __init__(self, teamid, datefrom ='', dateto ='', gamesegment ='',lastngames =0, leagueid='00',location='',measuretype ='Base',month=0,opponentteamid=0,outcome='',
+              paceadjust='N',permode='PerGame',period=0,plusminus='N',rank='N',season='2013-14',seasonsegment='',seasontype='Regular Season',
+              vsconference='',vsdivision=''):
+
+        self._url = "http://stats.nba.com/stats/teamdashboardbygeneralsplits?"
+        self._api_param = {
+             'DateFrom' :  datefrom,
+             'DateTo' : dateto,
+             'GameSegment' : gamesegment,
+             'LastNGames' : lastngames,
+             'LeagueID': leagueid,     
+             'Location' : location,
+             'MeasureType': measuretype,
+             'Month': month,
+             'OpponentTeamID' : opponentteamid,
+             'Outcome' : outcome,
+             'PaceAdjust' : paceadjust,
+             'PerMode' : permode,
+             'Period' : period,
+             'PlusMinus' : plusminus,
+             'Rank' : rank,
+             'Season' :  season,
+             'SeasonType' : seasontype,
+             'SeasonSegment' : seasonsegment,
+             'TeamID' : teamid,
+             'VsConference' : vsconference,
+             'VsDivision' : vsdivision
+             }
+        self._x = requests.get(self._url, params=self._api_param)
+        self._x = self._x.json()
+    def overall(self):
+        return pd.DataFrame(self._x['resultSets'][0]['rowSet'],columns=self._x['resultSets'][0]['headers']) 
+
+
+class PlayerBio:
+    def __init__(self, playerid, leagueid = '00'):
+
+        self._url = "http://stats.nba.com/stats/commonplayerinfo?"
+        self._api_param = {
+             'PlayerID'  : playerid,
+             'LeagueID': leagueid     
+             
+             }
+        self._x = requests.get(self._url, params=self._api_param)
+        self._x = self._x.json()
+    def bio(self):
+        return pd.DataFrame(self._x['resultSets'][0]['rowSet'],columns=self._x['resultSets'][0]['headers'])
+
+class PlayerStats:
+    def __init__(self, playerid, leagueid = '00', permode='PerGame'):
+
+        self._url = "http://stats.nba.com/stats/playercareerstats?"
+        self._api_param = {
+             'PlayerID': playerid,
+             'LeagueID': leagueid,     
+             'PerMode' : permode
+             
+             }
+        self._x = requests.get(self._url, params=self._api_param)
+        self._x = self._x.json()
+    def careerstats(self):
+        return pd.DataFrame(self._x['resultSets'][1]['rowSet'],columns=self._x['resultSets'][1]['headers']) 
+
+
 class BoxScore:
     def __init__(self, gameid, rangetype=0, startperiod=0, endperiod=0, startrange=0, endrange=0):
         self._url = "http://stats.nba.com/stats/boxscore?"
@@ -76,6 +158,26 @@ class BoxScore:
         return pd.DataFrame(self._x['resultSets'][11]['rowSet'],columns=self._x['resultSets'][11]['headers'])
     def teamtrack(self):
         return pd.DataFrame(self._x['resultSets'][12]['rowSet'],columns=self._x['resultSets'][12]['headers'])
+
+
+class Team_Gamelog:
+    def __init__(self, teamid, leagueid='00',season='2014-15',seasontype='Regular Season',
+              vsconference='',vsdivision=''):
+
+        self._url = "http://stats.nba.com/stats/teamgamelog?"
+        self._api_param = {
+             'LeagueID': leagueid,           
+             'Season' :  season,
+             'SeasonType' : seasontype,
+             'TeamID' : teamid
+             }
+        self._x = requests.get(self._url, params=self._api_param)
+        self._x = self._x.json()
+    def gamelog(self):
+        return pd.DataFrame(self._x['resultSets'][0]['rowSet'],columns=self._x['resultSets'][0]['headers']) 
+
+
+
 
 class GameLog:
     def __init__(self, playerid, season='2013-14',seasontype='Regular Season', leagueid=''):
